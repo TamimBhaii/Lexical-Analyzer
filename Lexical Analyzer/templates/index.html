@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lexical Analyzer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            padding: 40px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            font-family: monospace;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .clear-btn {
+            background-color: #dc3545;
+        }
+
+        .output {
+            margin-top: 20px;
+            background: #e6f2ff;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+
+        .nav-links {
+            text-align: right;
+            margin-bottom: 10px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            margin-left: 10px;
+            color: #007bff;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav-links">
+            <a href="/logout"> Logout</a>
+        </div>
+
+        <h1>Lexical Analyzer</h1>
+        <form method="POST">
+            <textarea name="code" id="codeArea" placeholder="Enter C code here...">{{ code }}</textarea>
+            <br>
+            <div class="btn-group">
+                <button type="submit" name="action" value="analyze">Run Analyzer</button>
+                <button type="submit" name="action" value="clear" class="clear-btn">Clear</button>
+            </div>
+        </form>
+
+        {% if output %}
+            <div class="output">
+                <h2>Output:</h2>
+                <pre>{{ output }}</pre>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
