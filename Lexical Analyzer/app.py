@@ -1,13 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import subprocess
 import os
+import re
 import mysql.connector
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-# ✅ MySQL connection
 db = mysql.connector.connect(
     host="localhost",
     user="root",
@@ -16,7 +16,6 @@ db = mysql.connector.connect(
 )
 cursor = db.cursor()
 
-# ✅ Home page (Lexical Analyzer)
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if 'user_id' not in session:
@@ -46,7 +45,6 @@ def index():
                     result = subprocess.run([exe_path], capture_output=True, text=True, timeout=10)
                     output = result.stdout
 
-                    # ✅ Save analysis result
                     cursor.execute(
                         "INSERT INTO analysis (user_id, input_code, tokens) VALUES (%s, %s, %s)",
                         (session['user_id'], code, output)
@@ -60,7 +58,6 @@ def index():
 
     return render_template('index.html', output=output, code=code)
 
-# ✅ Signup route with plain password storage
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     msg = ''
@@ -69,6 +66,10 @@ def signup():
         last_name = request.form['last_name']
         email = request.form['email']
         password = request.form['password']
+
+        if not re.match(r'^[a-zA-Z0-9._]+@gmail\.com$', email):
+            msg = 'Only valid Gmail addresses are allowed!'
+            return render_template('signup.html', msg=msg)
 
         cursor.execute("SELECT id FROM users WHERE email = %s", (email,))
         account = cursor.fetchone()
@@ -87,7 +88,6 @@ def signup():
 
     return render_template('signup.html', msg=msg)
 
-# ✅ Login route
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     msg = ''
@@ -106,7 +106,6 @@ def login():
 
     return render_template('login.html', msg=msg)
 
-# ✅ Logout route
 @app.route('/logout')
 def logout():
     session.clear()
