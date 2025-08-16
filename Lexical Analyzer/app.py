@@ -3,7 +3,6 @@ import subprocess
 import os
 import re
 import mysql.connector
-from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -77,10 +76,9 @@ def signup():
         if account:
             msg = 'Email already registered!'
         else:
-            hashed_password = generate_password_hash(password)
             cursor.execute(
-                "INSERT INTO users (first_name, last_name, email, password, plain_password) VALUES (%s, %s, %s, %s, %s)",
-                (first_name, last_name, email, hashed_password, password)
+                "INSERT INTO users (first_name, last_name, email, password) VALUES (%s, %s, %s, %s)",
+                (first_name, last_name, email, password)
             )
             db.commit()
             msg = 'Signup successful! Please login.'
@@ -98,7 +96,7 @@ def login():
         cursor.execute("SELECT id, password FROM users WHERE email = %s", (email,))
         account = cursor.fetchone()
 
-        if account and check_password_hash(account[1], password):
+        if account and account[1] == password:
             session['user_id'] = account[0]
             return redirect(url_for('index'))
         else:
