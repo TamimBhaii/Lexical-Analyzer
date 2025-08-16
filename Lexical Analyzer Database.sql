@@ -17,20 +17,20 @@ CREATE TABLE analysis (
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
 INSERT INTO users (first_name, last_name, email, password)
-VALUES (
-    'Admin',
-    'Tamim',
-    'admin@tamim.com',
-    '$pbkdf2-sha256$29000$CXn/0RfK2UakmSkLRpWtdA$hATYpM6zmOskkG2iZlyxj/XoAlO8AKimlId6bWY3xks'
-);
+VALUES ('Admin', 'Tamim', 'admin@tamim.com', '123456');
 
-SELECT email, password FROM users;
-SELECT email, plain_password FROM users;
-SELECT first_name, last_name, email, plain_password FROM users;
 
-SET SQL_SAFE_UPDATES = 0;
+SELECT id, first_name, last_name, email, password FROM users;
+SELECT * FROM users;
+SELECT * FROM analysis;
 
+
+SET FOREIGN_KEY_CHECKS = 0;
 DELETE FROM analysis;
 DELETE FROM users;
 
+DELETE FROM users WHERE id = 5;
+
+SET FOREIGN_KEY_CHECKS = 1;
